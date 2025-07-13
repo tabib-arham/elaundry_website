@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lavendar Shop - Service Provider Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .wave-bg {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .search-input {
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+
+        .dropdown-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        .quantity-btn {
+            transition: all 0.2s ease;
+        }
+
+        .quantity-btn:hover {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18,2.01L6,2C4.89,2 4,2.89 4,4V20C4,21.11 4.89,22 6,22H18C19.11,22 20,21.11 20,20V4C20,2.89 19.11,2.01 18,2.01M18,20H6V4H18V20M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16M10.5,11A1.5,1.5 0 0,0 12,12.5A1.5,1.5 0 0,0 13.5,11A1.5,1.5 0 0,0 12,9.5A1.5,1.5 0 0,0 10.5,11Z" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-xl font-bold text-gray-900">Lavendar Shop</h1>
+                        <p class="text-sm text-gray-600">DSC, Ashulia, Savar, Dhaka</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="btn-hover bg-blue-500 text-white px-4 py-2 rounded-full font-medium">
+                            Manage Order
+                        </button>
+                        <div class="notification-dot">5</div>
+                    </div>
+                    <button class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Provider Welcome Section -->
+    <section class="wave-bg py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-white">
+                <h2 class="text-3xl font-bold mb-4">Welcome to Bachelor's Point!</h2>
+                <p class="text-blue-100 text-lg mb-8">Choose the service you want to provide</p>
+                
+                <!-- Service Icons -->
+                <div class="grid grid-cols-4 gap-6 max-w-md mx-auto">
+                    <div class="service-icon text-center cursor-pointer" data-service="dry-clean">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-2 floating-animation">
+                            <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6,2C4.89,2 4,2.89 4,4V20C4,21.11 4.89,22 6,22H18C19.11,22 20,21.11 20,20V4C20,2.89 19.11,2 18,2H6M6,4H18V20H6V4M8,6V8H16V6H8M8,10V12H16V10H8M8,14V16H16V14H8Z" />
+                            </svg>
+                        </div>
+                        <span class="text-xs text-blue-100">Dry Clean</span>
+                    </div>
+                    <div class="service-icon text-center cursor-pointer" data-service="laundry">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-2 floating-animation">
+                            <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18,2.01L6,2C4.89,2 4,2.89 4,4V20C4,21.11 4.89,22 6,22H18C19.11,22 20,21.11 20,20V4C20,2.89 19.11,2.01 18,2.01M18,20H6V4H18V20M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16Z" />
+                            </svg>
+                        </div>
+                        <span class="text-xs text-blue-100">Laundry</span>
+                    </div>
+                    <div class="service-icon text-center cursor-pointer" data-service="iron">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-2 floating-animation">
+                            <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M21,6C21,4.89 20.11,4 19,4H5C3.89,4 3,4.89 3,6V10C3,11.11 3.89,12 5,12H19C20.11,12 21,11.11 21,10V6M5,6H19V10H5V6M21,16V20C21,21.11 20.11,22 19,22H5C3.89,22 3,21.11 3,20V16H21M19,16H5V20H19V16Z" />
+                            </svg>
+                        </div>
+                        <span class="text-xs text-blue-100">Iron</span>
+                    </div>
+                    <div class="service-icon text-center cursor-pointer" data-service="delivery">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-2 floating-animation">
+                            <svg class="w-8 h-8 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M19.5,9.5L21.46,12H17V9.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M20,8H17V4H3C1.89,4 1,4.89 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8Z" />
+                            </svg>
+                        </div>
+                        <span class="text-xs text-blue-100">Delivery</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Management Form -->
+    <section class="py-16 bg-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="space-y-6">
+                
+                <!-- Service Selection -->
+                <div class="service-card card-hover">
+                    <div class="flex justify-between items-center">
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
+                            <select class="dropdown-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="serviceSelect">
+                                <option value="">Select Service</option>
+                                <option value="dry-clean">Dry Clean</option>
+                                <option value="laundry">Laundry</option>
+                                <option value="iron">Iron</option>
+                                <option value="delivery">Delivery</option>
+                            </select>
+                        </div>
+                        <div class="ml-4">
+                            <button class="text-blue-500 hover:text-blue-600 font-medium text-sm transition-colors">
+                                See Pricing
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item Selection -->
+                <div class="service-card card-hover">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Item Type</label>
+                    <select class="dropdown-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="itemSelect">
+                        <option value="">Select item</option>
+                        <option value="shirt">Shirt</option>
+                        <option value="pants">Pants</option>
+                        <option value="dress">Dress</option>
+                        <option value="suit">Suit</option>
+                        <option value="bedsheet">Bed Sheet</option>
+                        <option value="curtain">Curtain</option>
+                    </select>
+                </div>
+
+                <!-- Quantity and Price -->
+                <div class="service-card card-hover">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-lg font-semibold text-gray-900">৳ <span id="totalPrice">00</span></span>
+                            <span class="text-sm text-gray-500">per item</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button class="quantity-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center font-bold text-gray-600 hover:bg-blue-500 hover:text-white hover:border-blue-500" onclick="changeQuantity(-1)">
+                                −
+                            </button>
+                            <span class="text-xl font-bold text-gray-900 min-w-8 text-center" id="quantity">0</span>
+                            <button class="quantity-btn w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center font-bold text-gray-600 hover:bg-blue-500 hover:text-white hover:border-blue-500" onclick="changeQuantity(1)">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Area and Delivery -->
+                <div class="service-card card-hover">
+                    <div class="flex justify-between items-center">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Service Area & Delivery</h3>
+                            <p class="text-gray-600">Add service area and delivery charge configuration</p>
+                        </div>
+                        <button class="btn-hover bg-blue-500 text-white px-8 py-3 rounded-full font-semibold">
+                            Add
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Service Summary -->
+                <div class="service-card card-hover bg-gray-50">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Service Summary</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Selected Service:</span>
+                            <span class="font-medium text-gray-900" id="selectedService">None</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Selected Item:</span>
+                            <span class="font-medium text-gray-900" id="selectedItem">None</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Quantity:</span>
+                            <span class="font-medium text-gray-900" id="summaryQuantity">0</span>
+                        </div>
+                        <div class="flex justify-between border-t pt-3">
+                            <span class="text-lg font-semibold text-gray-900">Total Price:</span>
+                            <span class="text-lg font-bold text-blue-600">৳ <span id="summaryTotal">00</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-4">
+                    <button class="btn-hover flex-1 bg-blue-500 text-white py-4 rounded-lg font-semibold text-lg">
+                        Save Service
+                    </button>
+                    <button class="btn-hover flex-1 bg-gray-200 text-gray-700 py-4 rounded-lg font-semibold text-lg hover:bg-gray-300">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="col-span-1">
+                    <div class="flex items-center mb-4">
+                        <svg class="h-8 w-8 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18,2.01L6,2C4.89,2 4,2.89 4,4V20C4,21.11 4.89,22 6,22H18C19.11,22 20,21.11 20,20V4C20,2.89 19.11,2.01 18,2.01M18,20H6V4H18V20M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16M10.5,11A1.5,1.5 0 0,0 12,12.5A1.5,1.5 0 0,0 13.5,11A1.5,1.5 0 0,0 12,9.5A1.5,1.5 0 0,0 10.5,11Z" />
+                        </svg>
+                        <span class="ml-3 text-xl font-bold">Bachelor's Point</span>
+                    </div>
+                    <p class="text-gray-400">Service Provider Dashboard - Manage your laundry services with ease.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Dry Cleaning</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Laundry</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Iron Service</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Delivery</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Provider Tools</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Manage Orders</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Set Pricing</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Service Areas</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Analytics</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>📍 DSC, Ashulia, Savar, Dhaka</li>
+                        <li>📞 (555) 123-4567</li>
+                        <li>✉️ providers@bachelorspoint.com</li>
+                        <li>🕒 24/7 Support Available</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentQuantity = 0;
+        let currentPrice = 0;
+
+        // Service pricing data
+        const servicePricing = {
+            'dry-clean': { 'shirt': 50, 'pants': 60, 'dress': 80, 'suit': 120, 'bedsheet': 40, 'curtain': 70 },
+            'laundry': { 'shirt': 30, 'pants': 35, 'dress': 45, 'suit': 80, 'bedsheet': 25, 'curtain': 50 },
+            'iron': { 'shirt': 20, 'pants': 25, 'dress': 30, 'suit': 50, 'bedsheet': 15, 'curtain': 35 },
+            'delivery': { 'shirt': 10, 'pants': 10, 'dress': 15, 'suit': 20, 'bedsheet': 10, 'curtain': 15 }
+        };
+
+        // Service icon selection
+        document.querySelectorAll('.service-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const service = this.getAttribute('data-service');
+                document.getElementById('serviceSelect').value = service;
+                updateSelectedService();
+                
+                // Visual feedback
+                document.querySelectorAll('.service-icon').forEach(i => {
+                    i.querySelector('div').classList.remove('ring-4', 'ring-blue-300');
+                });
+                this.querySelector('div').classList.add('ring-4', 'ring-blue-300');
+            });
+        });
+
+        // Service selection change
+        document.getElementById('serviceSelect').addEventListener('change', updateSelectedService);
+        document.getElementById('itemSelect').addEventListener('change', updateSelectedItem);
+
+        function updateSelectedService() {
+            const service = document.getElementById('serviceSelect').value;
+            const serviceText = document.getElementById('serviceSelect').options[document.getElementById('serviceSelect').selectedIndex].text;
+            document.getElementById('selectedService').textContent = service ? serviceText : 'None';
+            updatePrice();
+        }
+
+        function updateSelectedItem() {
+            const item = document.getElementById('itemSelect').value;
+            const itemText = document.getElementById('itemSelect').options[document.getElementById('itemSelect').selectedIndex].text;
+            document.getElementById('selectedItem').textContent = item ? itemText : 'None';
+            updatePrice();
+        }
+
+        function updatePrice() {
+            const service = document.getElementById('serviceSelect').value;
+            const item = document.getElementById('itemSelect').value;
+            
+            if (service && item && servicePricing[service] && servicePricing[service][item]) {
+                currentPrice = servicePricing[service][item];
+            } else {
+                currentPrice = 0;
+            }
+            
+            updateDisplay();
+        }
+
+        function changeQuantity(change) {
+            const newQuantity = currentQuantity + change;
+            if (newQuantity >= 0) {
+                currentQuantity = newQuantity;
+                updateDisplay();
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('quantity').textContent = currentQuantity;
+            document.getElementById('summaryQuantity').textContent = currentQuantity;
+            
+            const total = currentPrice * currentQuantity;
+            document.getElementById('totalPrice').textContent = currentPrice.toString().padStart(2, '0');
+            document.getElementById('summaryTotal').textContent = total.toString().padStart(2, '0');
+        }
+
+        // Reset functionality
+        document.querySelector('.bg-gray-200').addEventListener('click', function() {
+            document.getElementById('serviceSelect').value = '';
+            document.getElementById('itemSelect').value = '';
+            currentQuantity = 0;
+            currentPrice = 0;
+            document.getElementById('selectedService').textContent = 'None';
+            document.getElementById('selectedItem').textContent = 'None';
+            
+            // Remove visual feedback from service icons
+            document.querySelectorAll('.service-icon').forEach(icon => {
+                icon.querySelector('div').classList.remove('ring-4', 'ring-blue-300');
+            });
+            
+            updateDisplay();
+        });
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+
+</html>
