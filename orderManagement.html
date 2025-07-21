@@ -271,7 +271,7 @@
     </section>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 py-4">
         <!-- Order Statistics -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="stats-card">
@@ -331,6 +331,89 @@
             </div>
         </div>
     </div>
+    <!-- Orders Table -->
+    <section class="p-4 bg-white shadow-md m-4 rounded">
+        <h2 class="text-lg font-bold mb-3">Filter Orders</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input type="text" placeholder="Order ID" class="border p-2 rounded" />
+            <input type="text" placeholder="Customer Name" class="border p-2 rounded" />
+            <input type="date" class="border p-2 rounded" />
+            <select id="filterStatus" class="border p-2 rounded bg-white transition">
+                <option>Status</option>
+                <option>Confirmed</option>
+                <option>Picked</option>
+                <option>In Progress</option>
+                <option>Delivering</option>
+                <option>Completed</option>
+                <option>Cancelled</option>
+                <option>Pending</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- Orders Table -->
+    <section class="m-4 bg-white p-4 shadow-md rounded overflow-x-auto">
+        <table class="min-w-full table-auto text-sm">
+            <thead class="bg-gray-200 text-left">
+                <tr>
+                    <th class="p-2">Order ID</th>
+                    <th class="p-2">Customer</th>
+                    <th class="p-2">Address</th>
+                    <th class="p-2">Contact</th>
+                    <th class="p-2">Date</th>
+                    <th class="p-2">Service</th>
+                    <th class="p-2">Charge (Tk)</th>
+                    <th class="p-2">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                <!-- Example row -->
+                <tr>
+                    <td class="p-2">BP1001</td>
+                    <td class="p-2">Rahim Uddin</td>
+                    <td class="p-2">Mirpur-1, Dhaka</td>
+                    <td class="p-2">01711234567</td>
+                    <td class="p-2">2025-07-21</td>
+                    <td class="p-2">Wash & Iron</td>
+                    <td class="p-2">120</td>
+                    <td class="p-2">
+                        <select class="status-select border p-1 rounded bg-white transition">
+                            <option>Confirmed</option>
+                            <option>Picked</option>
+                            <option>In Progress</option>
+                            <option>Delivering</option>
+                            <option>Completed</option>
+                            <option>Cancelled</option>
+                            <option>Pending</option>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="p-2">BP1002</td>
+                    <td class="p-2">Arham</td>
+                    <td class="p-2">Mirpur-10, Dhaka</td>
+                    <td class="p-2">01716234567</td>
+                    <td class="p-2">2025-07-21</td>
+                    <td class="p-2">Wash & Iron</td>
+                    <td class="p-2">120</td>
+                    <td class="p-2">
+                        <select class="status-select border p-1 rounded bg-white transition">
+                            <option>Confirmed</option>
+                            <option>Picked</option>
+                            <option>In Progress</option>
+                            <option>Delivering</option>
+                            <option>Completed</option>
+                            <option>Cancelled</option>
+                            <option>Pending</option>
+                        </select>
+
+                    </td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </section>
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
@@ -378,6 +461,55 @@
             </div>
         </div>
     </footer>
+    <!-- ✅ Add this inside <head> -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const statusColors = {
+                "Confirmed": "status-order-confirmed",
+                "Picked": "status-picked",
+                "In Progress": "status-in-progress",
+                "Delivering": "status-delivering",
+                "Completed": "status-completed",
+                "Cancelled": "status-cancelled",
+                "Pending": "status-pending"
+            };
+
+            const selects = document.querySelectorAll(".status-select");
+
+            function updateSelectStyle(select) {
+                select.classList.remove(...Object.values(statusColors));
+                const selected = select.value;
+                const cls = statusColors[selected];
+                if (cls) {
+                    select.classList.add(cls);
+                }
+            }
+
+            selects.forEach(select => {
+                updateSelectStyle(select); // Initial color
+                select.addEventListener("change", function () {
+                    updateSelectStyle(select);
+                });
+            });
+
+            // 🔹 Filter Status Dropdown Styling
+            const filterSelect = document.getElementById("filterStatus");
+            if (filterSelect) {
+                const updateFilterStyle = () => {
+                    filterSelect.classList.remove(...Object.values(statusColors));
+                    const val = filterSelect.value;
+                    const cls = statusColors[val];
+                    if (cls) {
+                        filterSelect.classList.add(cls);
+                    }
+                };
+                updateFilterStyle(); // initial
+                filterSelect.addEventListener("change", updateFilterStyle);
+            }
+        });
+    </script>
+
+
 </body>
 
 </html>
