@@ -1,0 +1,86 @@
+.wave-bg {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        .status-active {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .icon-edit {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        .icon-edit:hover {
+            color: #374151;
+        }
+        .icon-delete {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            color: #ef4444;
+        }
+        .icon-delete:hover {
+            color: #dc2626;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: bold;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
