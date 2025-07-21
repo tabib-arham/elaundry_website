@@ -311,3 +311,192 @@
                </table>
            </div>
        </div>
+       <!-- Manage Promotions Section -->
+       <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+           <h3 class="text-xl font-bold text-gray-900 mb-6">Manage Promotions</h3>
+
+
+           <!-- Add Promotion Form -->
+           <div class="grid md:grid-cols-2 gap-6 mb-8">
+               <div>
+                   <label class="block text-sm font-medium text-gray-700 mb-2">Promotion Name</label>
+                   <div class="relative">
+                       <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                           fill="currentColor" viewBox="0 0 20 20">
+                           <path fill-rule="evenodd"
+                               d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                               clip-rule="evenodd"></path>
+                       </svg>
+                       <input type="text" placeholder="Enter promotion name"
+                           class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                   </div>
+               </div>
+               <div>
+                   <label class="block text-sm font-medium text-gray-700 mb-2">Discount Amount</label>
+                   <div class="relative">
+                       <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+                       <input type="number" placeholder="Enter discount percentage"
+                           class="w-full pl-8 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                   </div>
+               </div>
+           </div>
+
+
+           <div class="grid md:grid-cols-2 gap-6 mb-8">
+               <div>
+                   <label class="block text-sm font-medium text-gray-700 mb-2">Valid From</label>
+                   <input type="date"
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+               </div>
+               <div>
+                   <label class="block text-sm font-medium text-gray-700 mb-2">Valid To</label>
+                   <input type="date"
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+               </div>
+           </div>
+
+
+           <button class="btn-hover bg-blue-500 text-white px-6 py-3 rounded-lg font-medium mb-8">
+               <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                   <path fill-rule="evenodd"
+                       d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                       clip-rule="evenodd"></path>
+               </svg>
+               Add Promotion
+           </button>
+
+
+           <!-- Promotions Cards -->
+
+
+           <div class="bg-gray-50 p-8">
+               <div class="max-w-6xl mx-auto">
+                   <div class="grid md:grid-cols-3 gap-6">
+                       <!-- Summer Special Card -->
+                       <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                           <div class="flex justify-between items-start mb-4">
+                               <h4 class="text-lg font-semibold text-gray-900">Summer Special</h4>
+                               <span class="status-badge status-active">Active</span>
+                           </div>
+                           <div class="text-2xl font-bold text-blue-600 mb-2">20% Off</div>
+                           <p class="text-gray-600 text-sm mb-4">Discount: 20%</p>
+                           <p class="text-gray-500 text-xs mb-4">Valid: 2024-02-01 - 2024-02-28</p>
+                           <div class="flex gap-2">
+                               <svg class="icon-edit" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                   </path>
+                               </svg>
+                               <svg class="icon-delete" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                       d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                   </path>
+                               </svg>
+                           </div>
+                       </div>
+
+
+                       <!-- Weekend Offer Card -->
+                       <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                           <div class="flex justify-between items-start mb-4">
+                               <h4 class="text-lg font-semibold text-gray-900">Weekend Offer</h4>
+                               <span class="status-badge status-active">Active</span>
+                           </div>
+                           <div class="text-2xl font-bold text-green-600 mb-2">15% Off</div>
+                           <p class="text-gray-600 text-sm mb-4">Discount: 15%</p>
+                           <p class="text-gray-500 text-xs mb-4">Valid: 2024-02-10 - 2024-02-15</p>
+                           <div class="flex gap-2">
+                               <svg class="icon-edit" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                   </path>
+                               </svg>
+                               <svg class="icon-delete" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                       d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                   </path>
+                               </svg>
+                           </div>
+                       </div>
+
+
+                       <!-- New Year Special Card -->
+                       <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                           <div class="flex justify-between items-start mb-4">
+                               <h4 class="text-lg font-semibold text-gray-900">New Year Special</h4>
+                               <span class="status-badge status-active">Active</span>
+                           </div>
+                           <div class="text-2xl font-bold text-purple-600 mb-2">25% Off</div>
+                           <p class="text-gray-600 text-sm mb-4">Discount: 25%</p>
+                           <p class="text-gray-500 text-xs mb-4">Valid: 2024-01-25 - 2024-02-05</p>
+                           <div class="flex gap-2">
+                               <svg class="icon-edit" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                   </path>
+                               </svg>
+                               <svg class="icon-delete" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                       d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                   </path>
+                               </svg>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+   <!-- Footer -->
+   <footer class="bg-gray-900 text-white py-12">
+       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <div class="grid md:grid-cols-4 gap-8">
+               <div class="col-span-1">
+                   <div class="flex items-center mb-4">
+                       <svg class="h-8 w-8 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                           <path
+                               d="M18,2.01L6,2C4.89,2 4,2.89 4,4V20C4,21.11 4.89,22 6,22H18C19.11,22 20,21.11 20,20V4C20,2.89 19.11,2.01 18,2.01M18,20H6V4H18V20M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16M10.5,11A1.5,1.5 0 0,0 12,12.5A1.5,1.5 0 0,0 13.5,11A1.5,1.5 0 0,0 12,9.5A1.5,1.5 0 0,0 10.5,11Z" />
+                       </svg>
+                       <span class="ml-3 text-xl font-bold">Bachelor's Point</span>
+                   </div>
+                   <p class="text-gray-400">Making laundry feel like home with professional care and attention to
+                       detail.</p>
+               </div>
+
+
+               <div>
+                   <h4 class="text-lg font-semibold mb-4">Services</h4>
+                   <ul class="space-y-2 text-gray-400">
+                       <li><a href="#" class="hover:text-white transition-colors">Wash & Fold</a></li>
+                       <li><a href="#" class="hover:text-white transition-colors">Dry Cleaning</a></li>
+                       <li><a href="#" class="hover:text-white transition-colors">Pickup & Delivery</a></li>
+                       <li><a href="#" class="hover:text-white transition-colors">Commercial Services</a></li>
+                   </ul>
+               </div>
+
+
+               <div>
+                   <h4 class="text-lg font-semibold mb-4">Company</h4>
+                   <ul class="space-y-2 text-gray-400">
+                       <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                       <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                   </ul>
+               </div>
+
+
+               <div>
+                   <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                   <ul class="space-y-2 text-gray-400">
+                       <li>📍 123 Main Street, City, State 12345</li>
+                       <li>📞 (555) 123-4567</li>
+                       <li>✉️ info@bachelorspoint.com</li>
+                       <li>🕒 Mon-Fri: 7AM-9PM</li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+   </footer>
+
+
+</body>
+
