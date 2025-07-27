@@ -54,7 +54,6 @@ body {
     background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.328) 55%, rgba(180, 210, 255, 0.139) 100%);
     box-shadow: 0 6px 32px 4px rgba(255, 255, 255, 0.188), 0 2px 12px 0 rgba(146, 173, 216, 0.1), inset 0 1px 8px 0 rgba(255, 255, 255, 0.18);
     opacity: 0.85;
-
     pointer-events: none;
     filter: blur(0.5px) saturate(1.15);
     transition: background 0.3s, box-shadow 0.3s;
