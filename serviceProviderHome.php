@@ -1,3 +1,19 @@
+<?php
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: serviceProviderlog.html");
+    exit();
+}
+
+// Get user data from session
+$user_name = $_SESSION['name'];
+$user_location = $_SESSION['location'];
+$user_email = $_SESSION['email'];
+$user_contact = $_SESSION['contact'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -61,7 +77,7 @@
                       
 
                     </div>
-                     <a href="serviceProviderlog.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
+                     <a href="logout.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
                 </div>
             </div>
         </div>
@@ -90,14 +106,14 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-1">Lavender Shop</h3>
-                        <p class="text-gray-600 mb-1">Tuesday, July 29, 2025</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-1"><?php echo htmlspecialchars($user_name); ?></h3>
+                        <p class="text-gray-600 mb-1"><?php echo date('l, F j, Y'); ?></p>
                         <div class="flex items-center text-gray-500">
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" />
                             </svg>
-                            Khagan Bazar, Ashulia, Dhaka
+                            <?php echo htmlspecialchars($user_location); ?>
                         </div>
                     </div>
                 </div>
@@ -233,12 +249,6 @@
             </div>
         </div>
     </section>
-
-
-
-
-
-
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
