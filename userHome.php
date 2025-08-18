@@ -148,21 +148,13 @@ $conn->close();
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Services</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">About</a>
-                    <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Contact</a>
-                    <div class="relative">
-                        <button class="btn-hover bg-blue-500 text-white px-4 py-2 rounded-full font-medium">
-                            Track Order
-                        </button>
-                        <div class="notification-dot">3</div>
-                    </div>
-                    <a href="profile.html" class="flex items-center focus:outline-none">
-                        <img class="h-8 w-8 rounded-full bg-blue-500 border-2 border-gray-300 hover:border-blue-400 transition-colors"
-                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E"
-                            alt="Profile">
-                    </a>
+                    <a href="userHome.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
+          <a href="aboutUs.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">About Us</a>
+          <a href="trackOrder.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium relative">
+            Track Order
+            <span class="notification-dot">3</span>
+          </a>
+          <a href="log.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
                 </div>
             </div>
         </div>
