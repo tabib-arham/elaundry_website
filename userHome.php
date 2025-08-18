@@ -152,7 +152,7 @@ $conn->close();
           <a href="aboutUs.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">About Us</a>
           <a href="trackOrder.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium relative">
             Track Order
-            <span class="notification-dot">3</span>
+            
           </a>
           <a href="log.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
                 </div>
