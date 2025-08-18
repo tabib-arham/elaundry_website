@@ -1,3 +1,58 @@
+<?php
+// ================= Database Connection =================
+$servername = "localhost";   // Change if needed
+$username   = "root";        // Change if you set DB username
+$password   = "";            // Change if you set DB password
+$dbname     = "bachelorpoint"; // Change to your database name
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// ================= Handle Form Submission =================
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect and sanitize inputs
+    $name            = mysqli_real_escape_string($conn, $_POST['name']);
+    $contact         = mysqli_real_escape_string($conn, $_POST['contact']);
+    $email           = mysqli_real_escape_string($conn, $_POST['email']);
+    $location        = mysqli_real_escape_string($conn, $_POST['location']);
+    $birthday        = mysqli_real_escape_string($conn, $_POST['Birthday']);
+    $password        = mysqli_real_escape_string($conn, $_POST['password']);
+    $confirmPassword = mysqli_real_escape_string($conn, $_POST['confirmPassword']);
+
+    // Password check
+    if ($password !== $confirmPassword) {
+        echo "<script>alert('Passwords do not match!'); window.history.back();</script>";
+        exit();
+    }
+
+    // Extract birth year from Birthday
+    $birthYear = date("Y", strtotime($birthday));
+
+    // Create combine column value
+    $combine = $name . $birthYear;
+
+    // Secure password (hashing)
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    // Insert into userregister table
+    $sql = "INSERT INTO userregister (name, contact, email, location, Birthday, password, combine) 
+            VALUES ('$name', '$contact', '$email', '$location', '$birthday', '$hashedPassword', '$combine')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "<script>alert('Registration successful! Please login now.'); window.location.href='log.html';</script>";
+        exit();
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// Close connection
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,7 +103,7 @@
             </div>
 
             <!-- Registration Form -->
-            <form class="form" id="registrationForm">
+            <form class="form" id="registrationForm" method="POST" action="">
                 <!-- Name Input -->
                 <div class="form-group">
                     <label for="name" class="form-label">
@@ -83,6 +138,12 @@
                     </label>
                     <textarea id="location" name="location" class="form-input form-textarea"
                         placeholder="Enter your location" required></textarea>
+                </div>
+                <!--Birthday Input-->
+                <div>
+                    <label for="Birthday" class="form-label">Birthday</label>
+                    <input type="date" id="Birthday" name="Birthday" class="form-input"
+                        placeholder="Enter your birthday" required>
                 </div>
 
                 <!-- Password Input -->
@@ -130,7 +191,7 @@
 
                 <!-- Register Button -->
                 <button type="submit" class="register-button" id="registerBtn">
-                    <a href="log.html">Register</a>
+                    Register
                 </button>
 
                 <!-- Email verification -->
@@ -166,17 +227,6 @@
 
         confirmPasswordInput.addEventListener('input', validatePasswords);
         passwordInput.addEventListener('input', validatePasswords);
-
-        // Form submission
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (validatePasswords()) {
-                // Here you would typically send the form data to your server
-                alert('Registration form submitted successfully!');
-                // You can add your form submission logic here
-            }
-        });
     </script>
 </body>
 
