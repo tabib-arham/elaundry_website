@@ -242,7 +242,7 @@ $conn->close();
                     </div>
                     <input type="text"
                         class="search-input w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm"
-                        placeholder="Search laundry services..." id="searchInput" onkeyup="searchLaundryServices()">
+                        placeholder="Search by shop name or location..." id="searchInput" onkeyup="searchLaundryServices()">
                     <button class="absolute inset-y-0 right-0 pr-3 flex items-center" onclick="clearSearch()">
                         <svg class="h-5 w-5 text-gray-400 hover:text-gray-600 cursor-pointer" fill="currentColor"
                             viewBox="0 0 24 24">
@@ -257,7 +257,9 @@ $conn->close();
             <div id="laundryServices">
                 <?php foreach ($service_providers as $provider): ?>
                     <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 laundry-card"
-                        data-name="<?php echo htmlspecialchars(strtolower($provider['shopName'])); ?>" data-distance="1">
+                        data-name="<?php echo htmlspecialchars(strtolower($provider['shopName'])); ?>" 
+                        data-location="<?php echo htmlspecialchars(strtolower($provider['location'])); ?>"
+                        data-distance="1">
                         <div class="bg-gradient-to-r from-purple-400 to-pink-400 p-8 text-white relative">
                             <div class="absolute right-8 top-8">
                                 <button class="text-white hover:text-red-200 transition-colors">
@@ -310,13 +312,23 @@ $conn->close();
                                         Delivery period 24-72 Hours
                                     </div>
                                 </div>
-                                <button class="btn-hover bg-blue-500 text-white px-6 py-3 rounded-full font-semibold">
+                                <button class="btn-hover bg-blue-500 text-white px-6 py-3 rounded-full font-semibold"
+                                        onclick="bookService('<?php echo htmlspecialchars($provider['shopName']); ?>', '<?php echo htmlspecialchars($provider['location']); ?>')">
                                     Book
                                 </button>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
+            </div>
+
+            <!-- No Results Message -->
+            <div id="noResults" class="text-center py-8 hidden">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">No services found</h3>
+                <p class="mt-1 text-sm text-gray-500">Try adjusting your search terms.</p>
             </div>
 
             <div class="text-center">
@@ -373,19 +385,32 @@ $conn->close();
         </div>
     </footer>
 
-    <!-- JavaScript for Search Functionality -->
+    <!-- JavaScript for Search Functionality and Booking -->
     <script>
         function searchLaundryServices() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const cards = document.getElementsByClassName('laundry-card');
+            const noResults = document.getElementById('noResults');
+            let visibleCards = 0;
 
             for (let i = 0; i < cards.length; i++) {
                 const shopName = cards[i].getAttribute('data-name');
-                if (shopName.includes(input)) {
+                const location = cards[i].getAttribute('data-location');
+                
+                // Search both shop name and location
+                if (shopName.includes(input) || location.includes(input)) {
                     cards[i].style.display = '';
+                    visibleCards++;
                 } else {
                     cards[i].style.display = 'none';
                 }
+            }
+
+            // Show/hide no results message
+            if (visibleCards === 0 && input !== '') {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
             }
         }
 
@@ -394,6 +419,24 @@ $conn->close();
             input.value = '';
             searchLaundryServices(); // Reset the display of all cards
         }
+
+        function bookService(shopName, location) {
+            // Create URL with parameters
+            const params = new URLSearchParams({
+                shopName: shopName,
+                location: location
+            });
+            
+            // Redirect to order placement page
+            window.location.href = 'userorderplace.html?' + params.toString();
+        }
+
+        // Add Enter key support for search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchLaundryServices();
+            }
+        });
     </script>
 </body>
 

@@ -1,10 +1,126 @@
+<?php
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: log.php");
+    exit();
+}
+
+// Database connection
+$conn = new mysqli("localhost", "root", "", "bachelorpoint");
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Get shop details from URL parameters
+$shopName = isset($_GET['shopName']) ? $_GET['shopName'] : 'Lavender Laundry';
+$location = isset($_GET['location']) ? $_GET['location'] : 'Khagan Bazar';
+
+// Fetch shop details from database
+$stmt = $conn->prepare("SELECT shopName, location FROM serviceprovidersregistration WHERE shopName = ? AND location = ?");
+$stmt->bind_param("ss", $shopName, $location);
+$stmt->execute();
+$shop_result = $stmt->get_result();
+
+if ($shop_result->num_rows > 0) {
+    $shop_data = $shop_result->fetch_assoc();
+    $shopName = $shop_data['shopName'];
+    $location = $shop_data['location'];
+}
+$stmt->close();
+
+
+
+// Check if pricelist data exists for this shop, if not insert default data
+$check_prices = $conn->prepare("SELECT COUNT(*) as count FROM pricelist WHERE shop_name = ?");
+$check_prices->bind_param("s", $shopName);
+$check_prices->execute();
+$count_result = $check_prices->get_result();
+$count_row = $count_result->fetch_assoc();
+
+if ($count_row['count'] == 0) {
+    // Insert default pricing data for the shop
+    $default_prices = [
+        ['Apron', 12, 90, 50],
+        ['Baby Dress', 12, 80, 40],
+        ['Bed Sheet', 30, 140, 70],
+        ['Blanket', 0, 400, 300],
+        ['Coat', 50, 200, 120],
+        ['Curtain', 40, 180, 100],
+        ['Jacket', 60, 250, 150],
+        ['Jeans', 20, 100, 50],
+        ['Kurta', 15, 90, 45],
+        ['Lungi', 10, 60, 30],
+        ['Pant', 15, 90, 45],
+        ['Pillow Cover', 10, 60, 30],
+        ['Salwar Kameez', 20, 120, 60],
+        ['Shirt', 15, 90, 45],
+        ['Towel', 15, 80, 40]
+    ];
+
+    $insert_price = $conn->prepare("INSERT INTO pricelist (shop_name, item_name, iron_price, dry_clean_price, only_wash_price) VALUES (?, ?, ?, ?, ?)");
+    
+    foreach ($default_prices as $price) {
+        $insert_price->bind_param("ssddd", $shopName, $price[0], $price[1], $price[2], $price[3]);
+        $insert_price->execute();
+    }
+    $insert_price->close();
+}
+$check_prices->close();
+
+// Fetch pricing data for this shop
+$pricing_stmt = $conn->prepare("SELECT item_name, iron_price, dry_clean_price, only_wash_price FROM pricelist WHERE shop_name = ? ORDER BY item_name");
+$pricing_stmt->bind_param("s", $shopName);
+$pricing_stmt->execute();
+$pricing_result = $pricing_stmt->get_result();
+
+$pricing_data = [];
+while ($row = $pricing_result->fetch_assoc()) {
+    $pricing_data[] = $row;
+}
+$pricing_stmt->close();
+
+// Handle order placement
+if ($_POST && isset($_POST['place_order'])) {
+    $user_id = $_SESSION['user_id'];
+    $order_items = json_decode($_POST['order_items'], true);
+    $total_amount = floatval($_POST['total_amount']);
+    
+    // Generate unique order ID
+    $orderid = 'BP-' . date('Ymd') . '-' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
+    
+    $insert_order = $conn->prepare("INSERT INTO userorder (orderid, user_id, shop_name, service, item, numberofitem, dateoforder, orderstatus, amountoforder) VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending', ?)");
+    
+    $success = true;
+    foreach ($order_items as $item) {
+        $insert_order->bind_param("sisssiss", $orderid, $user_id, $shopName, $item['service'], $item['name'], $item['quantity'], date('Y-m-d'), $item['amount']);
+        if (!$insert_order->execute()) {
+            $success = false;
+            break;
+        }
+    }
+    
+    if ($success) {
+        $insert_order->close();
+        $conn->close();
+        // Redirect to delivery info page
+        header("Location: userDeliveryInfo.php?orderid=" . $orderid);
+        exit();
+    } else {
+        $error_message = "Error placing order. Please try again.";
+    }
+}
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Book your laundry service with Lavender Laundry and view pricing details." />
+    <meta name="description" content="Book your laundry service with <?php echo htmlspecialchars($shopName); ?> and view pricing details." />
     <title>User Order Place</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -19,7 +135,6 @@
             top: -5px;
             right: -5px;
             background-color: #ef4444;
-            /* Red color */
             color: white;
             width: 16px;
             height: 16px;
@@ -145,7 +260,6 @@
 
         .pricing-section.open {
             max-height: 800px;
-            /* Adjust based on content height */
         }
 
         .selected-items {
@@ -179,7 +293,6 @@
                     <a href="userHome.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
                     <a href="trackOrder.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium relative">
                         Track Order
-                        
                     </a>
                     <a href="log.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
                 </div>
@@ -190,8 +303,8 @@
     <!-- Hero Section -->
     <section class="wave-bg py-20 flex items-center justify-center relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4">Lavender Laundry</h1>
-            <p class="text-xl text-white mb-4">Khagan Bazar, Less than 1 KM away</p>
+            <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4"><?php echo htmlspecialchars($shopName); ?></h1>
+            <p class="text-xl text-white mb-4"><?php echo htmlspecialchars($location); ?>, Less than 1 KM away</p>
             <p class="text-lg text-blue-100 mb-6">Delivery: 24-72 Hours</p>
             <!-- Floating Bubbles -->
             <div class="bubble"></div>
@@ -199,6 +312,14 @@
             <div class="bubble"></div>
         </div>
     </section>
+
+    <?php if (isset($error_message)): ?>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <?php echo htmlspecialchars($error_message); ?>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <!-- Service Selection Section -->
     <section class="py-16 bg-white">
@@ -214,28 +335,17 @@
                     </select>
                     <select id="itemSelect" class="border border-gray-300 rounded-lg p-2 w-full sm:w-1/4">
                         <option value="">Select Item</option>
-                        <option value="apron">Apron</option>
-                        <option value="babydress">Baby Dress</option>
-                        <option value="bedsheet">Bed Sheet</option>
-                        <option value="blanket">Blanket</option>
-                        <option value="coat">Coat</option>
-                        <option value="curtain">Curtain</option>
-                        <option value="jacket">Jacket</option>
-                        <option value="jeans">Jeans</option>
-                        <option value="kurta">Kurta</option>
-                        <option value="lungi">Lungi</option>
-                        <option value="pant">Pant</option>
-                        <option value="pillowcover">Pillow Cover</option>
-                        <option value="salwarkameez">Salwar Kameez</option>
-                        <option value="shirt">Shirt</option>
-                        <option value="towel">Towel</option>
+                        <?php foreach ($pricing_data as $item): ?>
+                        <option value="<?php echo strtolower(str_replace(' ', '', $item['item_name'])); ?>">
+                            <?php echo htmlspecialchars($item['item_name']); ?>
+                        </option>
+                        <?php endforeach; ?>
                     </select>
                     <div class="flex items-center space-x-2">
                         <button id="decrease" class="bg-gray-200 text-gray-700 px-2 py-1 rounded">-</button>
                         <span id="quantity">0</span>
                         <button id="increase" class="bg-gray-200 text-gray-700 px-2 py-1 rounded">+</button>
-                        <button id="addItem" class="btn-hover bg-blue-500 text-white px-4 py-1 rounded-full">Add
-                            Item</button>
+                        <button id="addItem" class="btn-hover bg-blue-500 text-white px-4 py-1 rounded-full">Add Item</button>
                     </div>
                 </div>
                 <div class="text-right">
@@ -248,108 +358,28 @@
             <div id="pricingSection" class="pricing-section mt-4 mx-auto max-w-2xl">
                 <div class="bg-white rounded-2xl shadow-lg p-8">
                     <h2 class="text-2xl font-semibold text-gray-900 mb-4">Pricing Details</h2>
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="p-2">Item</th>
-                                <th class="p-2">Iron</th>
-                                <th class="p-2">Dry Clean</th>
-                                <th class="p-2">Only Wash</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b">
-                                <td class="p-2">Apron</td>
-                                <td class="p-2">12</td>
-                                <td class="p-2">90</td>
-                                <td class="p-2">50</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Baby Dress</td>
-                                <td class="p-2">12</td>
-                                <td class="p-2">80</td>
-                                <td class="p-2">40</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Bed Sheet</td>
-                                <td class="p-2">30</td>
-                                <td class="p-2">140</td>
-                                <td class="p-2">70</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Blanket</td>
-                                <td class="p-2">-</td>
-                                <td class="p-2">400</td>
-                                <td class="p-2">300</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Coat</td>
-                                <td class="p-2">50</td>
-                                <td class="p-2">200</td>
-                                <td class="p-2">120</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Curtain</td>
-                                <td class="p-2">40</td>
-                                <td class="p-2">180</td>
-                                <td class="p-2">100</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Jacket</td>
-                                <td class="p-2">60</td>
-                                <td class="p-2">250</td>
-                                <td class="p-2">150</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Jeans</td>
-                                <td class="p-2">20</td>
-                                <td class="p-2">100</td>
-                                <td class="p-2">50</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Kurta</td>
-                                <td class="p-2">15</td>
-                                <td class="p-2">90</td>
-                                <td class="p-2">45</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Lungi</td>
-                                <td class="p-2">10</td>
-                                <td class="p-2">60</td>
-                                <td class="p-2">30</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Pant</td>
-                                <td class="p-2">15</td>
-                                <td class="p-2">90</td>
-                                <td class="p-2">45</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Pillow Cover</td>
-                                <td class="p-2">10</td>
-                                <td class="p-2">60</td>
-                                <td class="p-2">30</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Salwar Kameez</td>
-                                <td class="p-2">20</td>
-                                <td class="p-2">120</td>
-                                <td class="p-2">60</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Shirt</td>
-                                <td class="p-2">15</td>
-                                <td class="p-2">90</td>
-                                <td class="p-2">45</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td class="p-2">Towel</td>
-                                <td class="p-2">15</td>
-                                <td class="p-2">80</td>
-                                <td class="p-2">40</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="p-2">Item</th>
+                                    <th class="p-2">Iron</th>
+                                    <th class="p-2">Dry Clean</th>
+                                    <th class="p-2">Only Wash</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($pricing_data as $item): ?>
+                                <tr class="border-b">
+                                    <td class="p-2"><?php echo htmlspecialchars($item['item_name']); ?></td>
+                                    <td class="p-2"><?php echo $item['iron_price'] > 0 ? $item['iron_price'] : '-'; ?></td>
+                                    <td class="p-2"><?php echo $item['dry_clean_price']; ?></td>
+                                    <td class="p-2"><?php echo $item['only_wash_price']; ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -359,11 +389,15 @@
                 <ul id="selectedItemsList" class="space-y-2"></ul>
                 <p id="totalCost" class="mt-4 text-gray-900 font-medium">Total Cost: 0 BDT</p>
             </div>
-            <!-- Place Order Button Outside the Box -->
-            <div class="text-center mt-6">
-                <button id="placeOrder"
-                    class="btn-hover bg-green-500 text-white px-6 py-3 rounded-full font-medium"><a href="userDeliveryInfo.html">Place Order</a></button>
-            </div>
+            
+            <!-- Place Order Form -->
+            <form id="orderForm" method="POST" class="text-center mt-6">
+                <input type="hidden" name="place_order" value="1">
+                <input type="hidden" name="order_items" id="orderItems">
+                <input type="hidden" name="total_amount" id="totalAmount">
+                <button type="submit" id="placeOrder"
+                    class="btn-hover bg-green-500 text-white px-6 py-3 rounded-full font-medium">Place Order</button>
+            </form>
         </div>
     </section>
 
@@ -379,8 +413,7 @@
                         </svg>
                         <span class="ml-3 text-xl font-bold">Bachelor's Point</span>
                     </div>
-                    <p class="text-gray-400">Making laundry feel like home<br> with professional care and <br>attention
-                        to detail.</p>
+                    <p class="text-gray-400">Making laundry feel like home<br> with professional care and <br>attention to detail.</p>
                 </div>
 
                 <div>
@@ -416,6 +449,20 @@
 
     <!-- JavaScript -->
     <script>
+        // Pricing data from PHP
+        const pricingData = <?php echo json_encode($pricing_data); ?>;
+        
+        // Create pricing lookup object
+        const prices = {};
+        pricingData.forEach(item => {
+            const key = item.item_name.toLowerCase().replace(/\s+/g, '');
+            prices[key] = {
+                iron: parseFloat(item.iron_price),
+                dryClean: parseFloat(item.dry_clean_price),
+                onlyWash: parseFloat(item.only_wash_price)
+            };
+        });
+
         // Pricing section toggle
         document.getElementById('seePricing').addEventListener('click', () => {
             const pricingSection = document.getElementById('pricingSection');
@@ -443,16 +490,35 @@
             const itemSelect = document.getElementById('itemSelect');
             const selectedService = serviceSelect.value;
             const selectedItem = itemSelect.value;
+            
             if (selectedService && selectedItem && quantity > 0) {
-                const item = { name: selectedItem.replace(/([A-Z])/g, ' $1').trim(), service: selectedService, quantity };
-                if (!selectedItems.some(i => i.name === item.name && i.service === item.service)) {
+                const itemName = itemSelect.options[itemSelect.selectedIndex].text;
+                const itemPrice = prices[selectedItem] ? prices[selectedItem][selectedService] : 0;
+                const totalItemPrice = itemPrice * quantity;
+                
+                const item = { 
+                    name: itemName, 
+                    service: selectedService, 
+                    quantity: quantity,
+                    unitPrice: itemPrice,
+                    amount: totalItemPrice
+                };
+                
+                // Check if item already exists, if so update quantity
+                const existingItemIndex = selectedItems.findIndex(i => i.name === item.name && i.service === item.service);
+                
+                if (existingItemIndex !== -1) {
+                    selectedItems[existingItemIndex].quantity += item.quantity;
+                    selectedItems[existingItemIndex].amount = selectedItems[existingItemIndex].unitPrice * selectedItems[existingItemIndex].quantity;
+                } else {
                     selectedItems.push(item);
-                    updateSelectedItems();
                 }
-                quantity = 0; // Reset quantity after adding
+                
+                updateSelectedItems();
+                quantity = 0;
                 document.getElementById('quantity').textContent = quantity;
-                itemSelect.value = ''; // Reset dropdown
-                serviceSelect.value = ''; // Reset service dropdown
+                itemSelect.value = '';
+                serviceSelect.value = '';
                 updateTotalCost();
             } else {
                 alert('Please select a service, item, and quantity.');
@@ -462,52 +528,42 @@
         function updateSelectedItems() {
             const selectedItemsList = document.getElementById('selectedItemsList');
             selectedItemsList.innerHTML = '';
-            selectedItems.forEach(item => {
+            selectedItems.forEach((item, index) => {
                 const li = document.createElement('li');
-                li.textContent = `${item.name} - ${item.service.replace(/([A-Z])/g, ' $1').trim()} - Quantity: ${item.quantity}`;
+                li.className = 'flex justify-between items-center bg-gray-50 p-2 rounded';
+                li.innerHTML = `
+                    <span>${item.name} - ${item.service.replace(/([A-Z])/g, ' $1').trim()} - Qty: ${item.quantity} - ${item.amount} BDT</span>
+                    <button onclick="removeItem(${index})" class="text-red-500 hover:text-red-700">Remove</button>
+                `;
                 selectedItemsList.appendChild(li);
             });
         }
 
+        function removeItem(index) {
+            selectedItems.splice(index, 1);
+            updateSelectedItems();
+            updateTotalCost();
+        }
+
         function updateTotalCost() {
-            const prices = {
-                'apron': { iron: 12, dryClean: 90, onlyWash: 50 },
-                'baby dress': { iron: 12, dryClean: 80, onlyWash: 40 },
-                'bed sheet': { iron: 30, dryClean: 140, onlyWash: 70 },
-                'blanket': { iron: 0, dryClean: 400, onlyWash: 300 },
-                'coat': { iron: 50, dryClean: 200, onlyWash: 120 },
-                'curtain': { iron: 40, dryClean: 180, onlyWash: 100 },
-                'jacket': { iron: 60, dryClean: 250, onlyWash: 150 },
-                'jeans': { iron: 20, dryClean: 100, onlyWash: 50 },
-                'kurta': { iron: 15, dryClean: 90, onlyWash: 45 },
-                'lungi': { iron: 10, dryClean: 60, onlyWash: 30 },
-                'pant': { iron: 15, dryClean: 90, onlyWash: 45 },
-                'pillow cover': { iron: 10, dryClean: 60, onlyWash: 30 },
-                'salwar kameez': { iron: 20, dryClean: 120, onlyWash: 60 },
-                'shirt': { iron: 15, dryClean: 90, onlyWash: 45 },
-                'towel': { iron: 15, dryClean: 80, onlyWash: 40 }
-            };
             let total = 0;
             selectedItems.forEach(item => {
-                total += (prices[item.name.toLowerCase()]?.[item.service] || 0) * item.quantity;
+                total += item.amount;
             });
             document.getElementById('totalCost').textContent = `Total Cost: ${total} BDT`;
+            document.getElementById('totalAmount').value = total;
         }
 
         // Place Order functionality
-        document.getElementById('placeOrder').addEventListener('click', () => {
-            if (selectedItems.length > 0) {
-                const orderId = `LL-2025-0818-1102`; // Current date and time
-                // Redirect to delivery info page with order details (using URL parameters for simplicity)
-                const params = new URLSearchParams({
-                    orderId: orderId,
-                    totalCost: document.getElementById('totalCost').textContent.split(' ')[2],
-                    items: JSON.stringify(selectedItems)
-                }).toString();
-                window.location.href = `delivery-info.html?${params}`;
-            } else {
+        document.getElementById('orderForm').addEventListener('submit', (e) => {
+            if (selectedItems.length === 0) {
+                e.preventDefault();
                 alert('Please add items to your order before placing it.');
+                return;
             }
+            
+            // Prepare order data
+            document.getElementById('orderItems').value = JSON.stringify(selectedItems);
         });
     </script>
 </body>
