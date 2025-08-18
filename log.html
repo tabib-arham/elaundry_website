@@ -45,6 +45,24 @@
         .social-login {
             margin-bottom: 20px !important;
         }
+
+        /* Fix for login button styling */
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #4facfe;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #00c6fb;
+        }
     </style>
 </head>
 
@@ -87,7 +105,7 @@
             </div>
 
             <!-- Login Form -->
-            <form class="form">
+            <form class="form" action="log.php" method="POST">
                 <!-- Email Input -->
                 <div class="input-group">
                     <label for="email" class="input-label">
@@ -109,7 +127,7 @@
                 <!-- Register and Forgot Password Links -->
                 <div class="form-links">
                     <div class="register-text">
-                        New Here ? <a href="register.php" class="register-link">Register</a>
+                        New Here ? <a href="register.html" class="register-link">Register</a>
                     </div>
                     <a href="forgot-password.html" class="forgot-link">Forgot password ?</a>
                 </div>
@@ -132,14 +150,10 @@
                 </div>
 
                 <!-- Login Button -->
-                <button type="submit" class="login-btn">
-                  <a href="userHome.html">Login</a>
-                </button>
+                <button type="submit" class="login-btn">Login</button>
             </form>
         </div>
     </div>
 
-
 </body>
-
 </html>
