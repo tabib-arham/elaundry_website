@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Track your order with Bachelor's Point." />
+  <title>Bachelor's Point - Track Order</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .wave-bg {
+      background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+      position: relative;
+      overflow: hidden;
+      min-height: 40vh;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.55) 55%, rgba(180, 210, 255, 0.12) 100%);
+      box-shadow: 0 6px 32px 4px rgba(255, 255, 255, 0.22), 0 2px 12px 0 rgba(59, 130, 246, 0.10), inset 0 1px 8px 0 rgba(255, 255, 255, 0.18);
+      opacity: 0.85;
+      pointer-events: none;
+      filter: blur(0.5px) saturate(1.15);
+    }
+
+    .bubble:nth-child(1) { left: 15%; width: 40px; height: 40px; bottom: -60px; animation: bubble-float 6s linear infinite; }
+    .bubble:nth-child(2) { left: 50%; width: 30px; height: 30px; bottom: 0; animation: bubble-float 10s linear infinite; }
+    .bubble:nth-child(3) { right: 10%; width: 50px; height: 50px; bottom: -70px; animation: bubble-float 8s linear infinite; }
+
+    @keyframes bubble-float {
+      0% { transform: translateY(0) scale(0.9); opacity: 0; }
+      10% { opacity: 0.7; }
+      80% { opacity: 0.7; transform: translateY(-80vh) scale(1.1); }
+      95% { opacity: 1; transform: translateY(-95vh) scale(1.6); }
+      100% { transform: translateY(-100vh) scale(2.5); opacity: 0; }
+    }
+
+    .card {
+      background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(24, 40, 72, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(24, 40, 72, 0.1);
+    }
+
+    .btn {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .text-glow {
+      text-shadow: 0 0 10px rgba(59, 130, 246, 0.3), 0 0 20px rgba(30, 64, 175, 0.2);
+    }
+
+  </style>
+</head>
+<body class="bg-gradient-to-b from-gray-100 to-gray-200 font-sans">
+  <!-- Header -->
+  <header class="bg-white/90 backdrop-blur-md shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-10 w-10 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M18,2.01L6,2C4.89,2 4,2.89 4,4V20C4,21.11 4.89,22 6,22H18C19.11,22 20,21.11 20,20V4C20,2.89 19.11,2.01 18,2.01M18,20H6V4H18V20M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16M10.5,11A1.5,1.5 0 0,0 12,12.5A1.5,1.5 0 0,0 13.5,11A1.5,1.5 0 0,0 12,9.5A1.5,1.5 0 0,0 10.5,11Z" />
+            </svg>
+          </div>
+          <div class="ml-4">
+            <h1 class="text-2xl font-bold text-gray-800">Bachelor's Point</h1>
+          </div>
+        </div>
+        <div class="flex items-center space-x-6">
+          <a href="userHome.php" class="text-gray-600 hover:text-blue-600 px-4 py-2 text-sm font-medium transition-colors">Home</a>
+          <a href="aboutUs.html" class="text-gray-600 hover:text-blue-600 px-4 py-2 text-sm font-medium transition-colors">About Us</a>
+          <a href="#" class="text-gray-600 hover:text-blue-600 px-4 py-2 text-sm font-medium transition-colors relative">
+            Track Order
+          </a>
+          <a href="log.html" class="text-gray-600 hover:text-blue-600 px-4 py-2 text-sm font-medium transition-colors">Log Out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="wave-bg py-24 flex items-center justify-center relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+      <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-4 text-glow">Track Your Order</h1>
+      <p class="text-lg md:text-xl text-white/80 mb-6">Stay updated on the status of your Bachelor's Point order.</p>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+    </div>
+  </section>
+
+  <!-- Tracking Section -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="card p-8 md:p-12">
+        <h2 class="text-3xl font-semibold text-gray-800 mb-6">Your Order</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-gray-100 border-b-2 border-gray-200">
+                <th class="p-4 text-gray-600 font-medium">Order ID</th>
+                <th class="p-4 text-gray-600 font-medium">User ID</th>
+                <th class="p-4 text-gray-600 font-medium">Status</th>
+                <th class="p-4 text-gray-600 font-medium">Estimated Delivery</th>
+              </tr>
+            </thead>
+            <tbody id="orderTable"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="col-span-1">
+          <div class="flex items-center mb-4">
+            <svg class="h-10 w-10 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M18,2.01L6,2C4.89,2 4,2.89 4,4V20C4,21.11 4.89,22 6,22H18C19.11,22 20,21.11 20,20V4C20,2.89 19.11,2.01 18,2.01M18,20H6V4H18V20M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16M10.5,11A1.5,1.5 0 0,0 12,12.5A1.5,1.5 0 0,0 13.5,11A1.5,1.5 0 0,0 12,9.5A1.5,1.5 0 0,0 10.5,11Z" />
+            </svg>
+            <span class="ml-3 text-xl font-bold">Bachelor's Point</span>
+          </div>
+          <p class="text-gray-400 text-sm">Transforming laundry into a seamless experience<br>for bachelor's convenience.</p>
+        </div>
+
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Services</h4>
+          <ul class="space-y-2 text-gray-400 text-sm">
+            <li><a href="#" class="hover:text-white transition-colors">Wash & Fold</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Dry Cleaning</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Pickup & Delivery</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Commercial</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Company</h4>
+          <ul class="space-y-2 text-gray-400 text-sm">
+            <li><a href="about-us.html" class="hover:text-white transition-colors">About Us</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Contact</h4>
+          <ul class="space-y-2 text-gray-400 text-sm">
+            <li>📍 123 Bachelor St</li>
+            <li>📞 +1 (555) 123-4567</li>
+            <li>✉️ info@bachelorspoint.com</li>
+            <li>🕒 Mon-Fri: 8AM-8PM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Sample data for a single order (replace with API data in a live system)
+    const order = {
+      orderId: 'BP-2025-0819-0322',
+      userId: 'UID-2025-0819-0322',
+      status: 'In Progress',
+      estimatedDelivery: '2025-08-20 12:00 PM'
+    };
+
+    // Populate the order table
+    const orderTable = document.getElementById('orderTable');
+    const row = document.createElement('tr');
+    row.className = 'border-b border-gray-200 hover:bg-gray-50 transition-colors';
+    row.innerHTML = `
+      <td class="p-4">${order.orderId}</td>
+      <td class="p-4">${order.userId}</td>
+      <td class="p-4">${order.status}</td>
+      <td class="p-4">${order.estimatedDelivery}</td>
+    `;
+    orderTable.appendChild(row);
+
+    // Handle URL parameters (optional override from previous page)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('orderId')) {
+      const updatedOrder = {
+        orderId: urlParams.get('orderId'),
+        userId: urlParams.get('userId') || '[User ID]',
+        status: urlParams.get('orderStatus') || '[Status]',
+        estimatedDelivery: urlParams.get('estimatedDelivery') || '[Estimated Delivery]'
+      };
+      orderTable.innerHTML = ''; // Clear existing row
+      const newRow = document.createElement('tr');
+      newRow.className = 'border-b border-gray-200 hover:bg-gray-50 transition-colors';
+      newRow.innerHTML = `
+        <td class="p-4">${updatedOrder.orderId}</td>
+        <td class="p-4">${updatedOrder.userId}</td>
+        <td class="p-4">${updatedOrder.status}</td>
+        <td class="p-4">${updatedOrder.estimatedDelivery}</td>
+      `;
+      orderTable.appendChild(newRow);
+    }
+  </script>
+</body>
+</html>
