@@ -1,3 +1,52 @@
+<?php
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: log.php"); // Redirect to login page if not logged in
+    exit();
+}
+
+// Database connection
+$conn = new mysqli("localhost", "root", "", "bachelorpoint");
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Initialize user variables to avoid undefined variable errors
+$user_name = "Guest";
+$user_email = "";
+$user_contact = "";
+$user_location = "";
+
+// Fetch user data using prepared statement
+$userId = $_SESSION['user_id'];
+$stmt = $conn->prepare("SELECT name, email, contact, location FROM userregister WHERE id = ?");
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$user_result = $stmt->get_result();
+
+if ($user_result->num_rows > 0) {
+    $user_row = $user_result->fetch_assoc();
+    $user_name = $user_row['name'];
+    $user_email = $user_row['email'];
+    $user_contact = $user_row['contact'];
+    $user_location = $user_row['location'];
+}
+
+$stmt->close();
+
+// Fetch all service providers from serviceprovidersregistration
+$service_result = $conn->query("SELECT shopName, location FROM serviceprovidersregistration ORDER BY id ASC");
+$service_providers = [];
+if ($service_result->num_rows > 0) {
+    while ($row = $service_result->fetch_assoc()) {
+        $service_providers[] = $row;
+    }
+}
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -131,8 +180,8 @@
                         </svg>
                     </div>
                 </div>
-                <h2 class="text-3xl font-bold mb-2">Sabrin Liza</h2>
-                <p class="text-blue-100 text-lg">RASGI, DSC, Ashulia, Savar, Dhaka</p>
+                <p class="text-2xl font-semibold mb-2"><?php echo htmlspecialchars($user_name); ?></p>
+                <p class="text-blue-100 text-lg"><?php echo htmlspecialchars($user_location); ?></p>
             </div>
         </div>
     </section>
@@ -215,81 +264,78 @@
 
             <!-- Laundry Service Cards -->
             <div id="laundryServices">
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 laundry-card"
-                    data-name="lavandar laundry" data-distance="1">
-                    <div class="bg-gradient-to-r from-purple-400 to-pink-400 p-8 text-white relative">
-                        <div class="absolute right-8 top-8">
-                            <button class="text-white hover:text-red-200 transition-colors">
-                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5 2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="floating-animation">
-                            <div class="flex items-center justify-center mb-6">
-                                <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center mr-6">
-                                    <svg class="w-12 h-12 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
+                <?php foreach ($service_providers as $provider): ?>
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 laundry-card"
+                        data-name="<?php echo htmlspecialchars(strtolower($provider['shopName'])); ?>" data-distance="1">
+                        <div class="bg-gradient-to-r from-purple-400 to-pink-400 p-8 text-white relative">
+                            <div class="absolute right-8 top-8">
+                                <button class="text-white hover:text-red-200 transition-colors">
+                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
                                         <path
-                                            d="M18,2.01L6,2C4.89,2 4,2.89 4,4V20C4,21.11 4.89,22 6,22H18C19.11,22 20,21.11 20,20V4C20,2.89 19.11,2.01 18,2.01M18,20H6V4H18V20M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16Z" />
+                                            d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5 2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" />
                                     </svg>
-                                </div>
-                                <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                                    </svg>
+                                </button>
+                            </div>
+                            <div class="floating-animation">
+                                <div class="flex items-center justify-center mb-6">
+                                    <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center mr-6">
+                                        <svg class="w-12 h-12 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M18,2.01L6,2C4.89,2 4,2.89 4,4V20C4,21.11 4.89,22 6,22H18C19.11,22 20,21.11 20,20V4C20,2.89 19.11,2.01 18,2.01M18,20H6V4H18V20M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16Z" />
+                                        </svg>
+                                    </div>
+                                    <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center">
+                                        <svg class="w-12 h-12 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-900 mb-2">Lavendar Laundry</h3>
-                                <div class="flex items-center text-sm text-gray-500 mb-2">
-                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" />
-                                    </svg>
-                                    <p>Khagan Bazar</p>
-                                </div>
-                                <div class="flex items-center text-sm text-gray-500 mb-2">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2"><?php echo htmlspecialchars($provider['shopName']); ?></h3>
+                                    <div class="flex items-center text-sm text-gray-500 mb-2">
                                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" />
+                                            <path
+                                                d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" />
+                                        </svg>
+                                        <p><?php echo htmlspecialchars($provider['location']); ?></p>
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-500 mb-2">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" />
                                         </svg>
                                         <p>Less than 1 KM away</p>
-
-                                                                      
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                            <path
+                                                d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" />
+                                        </svg>
+                                        Delivery period 24-72 Hours
+                                    </div>
                                 </div>
-                                <div class="flex items-center text-sm text-gray-500">
-                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" />
-                                    </svg>
-                                    Delivery period 24-72 Hours
-                                </div>
+                                <button class="btn-hover bg-blue-500 text-white px-6 py-3 rounded-full font-semibold">
+                                    Book
+                                </button>
                             </div>
-                            <button class="btn-hover bg-blue-500 text-white px-6 py-3 rounded-full font-semibold">
-                                Book
-                            </button>
                         </div>
                     </div>
-                </div>
-
-
+                <?php endforeach; ?>
             </div>
 
-        </div>
-
-        <div class="text-center">
-            <button class="text-blue-500 font-medium hover:text-blue-600 transition-colors">
-                Search more
-            </button>
-        </div>
+            <div class="text-center">
+                <button class="text-blue-500 font-medium hover:text-blue-600 transition-colors">
+                    Search more
+                </button>
+            </div>
         </div>
     </section>
+
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -303,7 +349,6 @@
                         <span class="ml-3 text-xl font-bold">Bachelor's Point</span>
                     </div>
                     <p class="text-gray-400">Making laundry feel like home<br> with professional care and <br>attention to detail.</p>
-                        
                 </div>
 
                 <div>
@@ -321,7 +366,6 @@
                     <ul class="space-y-2 text-gray-400">
                         <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
-
                     </ul>
                 </div>
 
@@ -335,9 +379,31 @@
                     </ul>
                 </div>
             </div>
-
         </div>
     </footer>
+
+    <!-- JavaScript for Search Functionality -->
+    <script>
+        function searchLaundryServices() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.getElementsByClassName('laundry-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                const shopName = cards[i].getAttribute('data-name');
+                if (shopName.includes(input)) {
+                    cards[i].style.display = '';
+                } else {
+                    cards[i].style.display = 'none';
+                }
+            }
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('searchInput');
+            input.value = '';
+            searchLaundryServices(); // Reset the display of all cards
+        }
+    </script>
 </body>
 
 </html>
