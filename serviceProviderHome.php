@@ -116,79 +116,60 @@ $user_contact = $_SESSION['contact'];
         </div>
     </section>
 
-    <!-- Dashboard Statistics -->
-    <section class="py-8 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-6">
-                <!-- Today's Orders -->
-                <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                    <div class="flex items-center justify-center mb-4">
-                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                            <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M19,7H18V6A2,2 0 0,0 16,4H8A2,2 0 0,0 6,6V7H5A1,1 0 0,0 4,8V19A3,3 0 0,0 7,22H17A3,3 0 0,0 20,19V8A1,1 0 0,0 19,7M8,6H16V7H8V6M18,19A1,1 0 0,1 17,20H7A1,1 0 0,1 6,19V9H8V10A1,1 0 0,0 9,11H11A1,1 0 0,0 12,10V9H14V10A1,1 0 0,0 15,11H17A1,1 0 0,0 18,10V9H18V19Z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-gray-900 mb-2">24</div>
-                        <div class="text-gray-600 mb-2">Today's Orders</div>
-                        <div class="text-green-500 text-sm font-medium">+12.5%</div>
-                    </div>
-                </div>
+    
 
-                <!-- Pending Orders -->
-                <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                    <div class="flex items-center justify-center mb-4">
-                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center">
-                            <svg class="w-8 h-8 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-gray-900 mb-2">8</div>
-                        <div class="text-gray-600 mb-2">Pending Orders</div>
-                        <div class="text-red-500 text-sm font-medium">-2.5%</div>
-                    </div>
-                </div>
-
-                <!-- Completed Today -->
-                <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                    <div class="flex items-center justify-center mb-4">
-                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                            <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-gray-900 mb-2">16</div>
-                        <div class="text-gray-600 mb-2">Completed Today</div>
-                        <div class="text-green-500 text-sm font-medium">+8.3%</div>
-                    </div>
-                </div>
-
-                <!-- Total Revenue -->
-                <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                    <div class="flex items-center justify-center mb-4">
-                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                            <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M7,15H9C9,16.08 10.37,17 12,17C13.63,17 15,16.08 15,15C15,13.9 13.96,13.5 11.76,12.97C9.64,12.44 7,11.78 7,9C7,7.21 8.47,5.69 10.5,5.18V3H13.5V5.18C15.53,5.69 17,7.21 17,9H15C15,7.92 13.63,7 12,7C10.37,7 9,7.92 9,9C9,10.1 10.04,10.5 12.24,11.03C14.36,11.56 17,12.22 17,15C17,16.79 15.53,18.31 13.5,18.82V21H10.5V18.82C8.47,18.31 7,16.79 7,15Z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-gray-900 mb-2">5000</div>
-                        <div class="text-gray-600 mb-2">Total Revenue</div>
-                        <div class="text-green-500 text-sm font-medium">+15.2%</div>
-                    </div>
-                </div>
-            </div>
+  <!-- Services Section -->
+  <section id="services" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Our Services</h2>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">We provide comprehensive laundry solutions tailored to your
+          needs</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Wash & Fold -->
+        <div class="bg-gray-50 rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
+          <!--icon-->
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 2v2H5V5h14zm0 14H5V9h14v10zm-7-2a3 3 0 0 1-3-3h2a1 1 0 1 0 2 0h2a3 3 0 0 1-3 3zm-4-7a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm4 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm4 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Wash & Fold</h3>
+          <p class="text-gray-600">Professional washing and folding service with attention to detail</p>
         </div>
-    </section>
+
+        <!-- Dry Cleaning -->
+        <div class="bg-gray-50 rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
+          <!--icon-->
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 21h18M5 21V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14M9 7V3h6v4" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 11h8M8 15h8" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Dry Cleaning</h3>
+          <p class="text-gray-600">Expert dry cleaning for delicate fabrics and special garments</p>
+        </div>
+
+
+
+        <!-- Pickup & Delivery -->
+        <div class="bg-gray-50 rounded-xl p-8 text-center hover:shadow-lg transition-shadow">
+          <!--icon-->
+          <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2Z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Pickup & Delivery</h3>
+          <p class="text-gray-600">Convenient pickup and delivery service right to your doorstep</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
     <!-- Customer Reviews -->
     <section class="py-16 bg-white">

@@ -162,7 +162,7 @@ if ($conn->connect_error) {
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="userHome.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
-                    <a href="trackOrder.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
+                    <a href="trackOrder.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                         Track Order
                     </a>
                     <a href="log.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
