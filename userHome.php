@@ -1,6 +1,13 @@
-```php
 <?php
 session_start();
+
+// Initialize variables to avoid undefined variable errors
+$user_name = "Guest";
+$user_email = "";
+$user_contact = "";
+$user_location = "";
+$service_providers = [];
+$error_message = "";
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -11,56 +18,45 @@ if (!isset($_SESSION['user_id'])) {
 // Database connection
 $conn = new mysqli("localhost", "root", "", "bachelorpoint");
 
-try {
-    // Check connection
-    if ($conn->connect_error) {
-        throw new Exception("Connection failed: " . $conn->connect_error);
-    }
-
-    // Initialize user variables to avoid undefined variable errors
-    $user_name = "Guest";
-    $user_email = "";
-    $user_contact = "";
-    $user_location = "";
-
+if ($conn->connect_error) {
+    error_log("Database connection failed: " . $conn->connect_error);
+    $error_message = "Unable to connect to database. Please try again later.";
+} else {
     // Fetch user data using prepared statement
     $userId = $_SESSION['user_id'];
     $stmt = $conn->prepare("SELECT name, email, contact, location FROM userregister WHERE id = ?");
-    if (!$stmt) {
-        throw new Exception("Prepare failed: " . $conn->error);
-    }
-    $stmt->bind_param("i", $userId);
-    $stmt->execute();
-    $user_result = $stmt->get_result();
+    if ($stmt) {
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $user_result = $stmt->get_result();
 
-    if ($user_result->num_rows > 0) {
-        $user_row = $user_result->fetch_assoc();
-        $user_name = htmlspecialchars($user_row['name']);
-        $user_email = htmlspecialchars($user_row['email']);
-        $user_contact = htmlspecialchars($user_row['contact']);
-        $user_location = htmlspecialchars($user_row['location']);
+        if ($user_result && $user_result->num_rows > 0) {
+            $user_row = $user_result->fetch_assoc();
+            $user_name = htmlspecialchars($user_row['name']);
+            $user_email = htmlspecialchars($user_row['email']);
+            $user_contact = htmlspecialchars($user_row['contact']);
+            $user_location = htmlspecialchars($user_row['location']);
+        }
+        $stmt->close();
+    } else {
+        error_log("Prepare failed: " . $conn->error);
+        $error_message = "Unable to fetch user data. Please try again later.";
     }
-    $stmt->close();
 
     // Fetch all service providers from serviceprovidersregistration
-    $service_providers = [];
     $service_result = $conn->query("SELECT shopName, location FROM serviceprovidersregistration ORDER BY id ASC");
     if ($service_result) {
         while ($row = $service_result->fetch_assoc()) {
             $service_providers[] = $row;
         }
     } else {
-        throw new Exception("Query failed: " . $conn->error);
+        error_log("Query failed: " . $conn->error);
+        if (!$error_message) {
+            $error_message = "Unable to fetch service providers. Please try again later.";
+        }
     }
 
-} catch (Exception $e) {
-    // Log error (in production, log to a file instead)
-    error_log("Database error: " . $e->getMessage());
-    $error_message = "Unable to connect to database or fetch data. Please try again later.";
-} finally {
-    if (isset($conn) && $conn instanceof mysqli) {
-        $conn->close();
-    }
+    $conn->close();
 }
 ?>
 
@@ -172,7 +168,7 @@ try {
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="userHome.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
-                    <a href="trackOrder.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium relative">
+                    <a href="trackOrder.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                         Track Order
                     </a>
                     <a href="log.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
@@ -350,7 +346,7 @@ try {
                                             Delivery period 24-72 Hours
                                         </div>
                                     </div>
-                                    <a href="userOrderplace.php?shopName=<?php echo urlencode($provider['shopName']); ?>&location=<?php echo urlencode($provider['location']); ?>"
+                                    <a href="userOrderoplace.php?shopName=<?php echo urlencode($provider['shopName']); ?>"
                                         class="btn-hover bg-blue-500 text-white px-6 py-3 rounded-full font-semibold">
                                         Book
                                     </a>
@@ -469,4 +465,3 @@ try {
 </body>
 
 </html>
-```
