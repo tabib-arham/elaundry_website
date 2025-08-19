@@ -1,13 +1,7 @@
 <?php
 session_start();
 
-// Initialize variables to avoid undefined variable errors
-$user_name = "Guest";
-$user_email = "";
-$user_contact = "";
-$user_location = "";
-$service_providers = [];
-$error_message = "";
+
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
