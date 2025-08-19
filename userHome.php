@@ -3,7 +3,7 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: log.php"); // Redirect to login page if not logged in
+    header("Location: log.php");
     exit();
 }
 
@@ -28,10 +28,10 @@ $user_result = $stmt->get_result();
 
 if ($user_result->num_rows > 0) {
     $user_row = $user_result->fetch_assoc();
-    $user_name = $user_row['name'];
-    $user_email = $user_row['email'];
-    $user_contact = $user_row['contact'];
-    $user_location = $user_row['location'];
+    $user_name = htmlspecialchars($user_row['name']);
+    $user_email = htmlspecialchars($user_row['email']);
+    $user_contact = htmlspecialchars($user_row['contact']);
+    $user_location = htmlspecialchars($user_row['location']);
 }
 
 $stmt->close();
@@ -149,11 +149,10 @@ $conn->close();
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="userHome.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
-          <a href="trackOrder.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium relative">
-            Track Order
-            
-          </a>
-          <a href="log.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
+                    <a href="trackOrder.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium relative">
+                        Track Order
+                    </a>
+                    <a href="log.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
                 </div>
             </div>
         </div>
@@ -171,8 +170,8 @@ $conn->close();
                         </svg>
                     </div>
                 </div>
-                <p class="text-2xl font-semibold mb-2"><?php echo htmlspecialchars($user_name); ?></p>
-                <p class="text-blue-100 text-lg"><?php echo htmlspecialchars($user_location); ?></p>
+                <p class="text-2xl font-semibold mb-2"><?php echo $user_name; ?></p>
+                <p class="text-blue-100 text-lg"><?php echo $user_location; ?></p>
             </div>
         </div>
     </section>
@@ -312,10 +311,10 @@ $conn->close();
                                         Delivery period 24-72 Hours
                                     </div>
                                 </div>
-                                <button class="btn-hover bg-blue-500 text-white px-6 py-3 rounded-full font-semibold"
-                                        onclick="bookService('<?php echo htmlspecialchars($provider['shopName']); ?>', '<?php echo htmlspecialchars($provider['location']); ?>')">
+                                <a href="userOrderplace.php?shopName=<?php echo urlencode($provider['shopName']); ?>&location=<?php echo urlencode($provider['location']); ?>"
+                                    class="btn-hover bg-blue-500 text-white px-6 py-3 rounded-full font-semibold">
                                     Book
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -385,7 +384,7 @@ $conn->close();
         </div>
     </footer>
 
-    <!-- JavaScript for Search Functionality and Booking -->
+    <!-- JavaScript for Search Functionality -->
     <script>
         function searchLaundryServices() {
             const input = document.getElementById('searchInput').value.toLowerCase();
@@ -418,17 +417,6 @@ $conn->close();
             const input = document.getElementById('searchInput');
             input.value = '';
             searchLaundryServices(); // Reset the display of all cards
-        }
-
-        function bookService(shopName, location) {
-            // Create URL with parameters
-            const params = new URLSearchParams({
-                shopName: shopName,
-                location: location
-            });
-            
-            // Redirect to order placement page
-            window.location.href = 'userorderplace.html?' + params.toString();
         }
 
         // Add Enter key support for search

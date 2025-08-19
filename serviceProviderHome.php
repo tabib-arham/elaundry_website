@@ -33,7 +33,6 @@ $user_contact = $_SESSION['contact'];
             box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
         }
 
-
         .notification-dot {
             position: absolute;
             top: -1px;
@@ -47,7 +46,6 @@ $user_contact = $_SESSION['contact'];
             justify-content: center;
             font-size: 10px;
             color: white;
-            
         }
     </style>
 </head>
@@ -66,22 +64,20 @@ $user_contact = $_SESSION['contact'];
                     </div>
                     <div class="ml-3">
                         <h1 class="text-xl font-bold text-gray-900">Bachelor's Point</h1>
-                        
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <button href="#" class="text-blue-600  px-3 py-2 text-sm font-medium">Home</button>
-                        <a href="serviceManagement.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Manage Service</a>
+                        <button href="#" class="text-blue-600 px-3 py-2 text-sm font-medium">Home</button>
+                        <a href="serviceManagement.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Manage Service</a>
                         <a href="orderManagement.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Orders</a>
-                      
-
                     </div>
-                     <a href="logout.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
+                    <a href="logout.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
                 </div>
             </div>
         </div>
     </header>
+
     <!-- Service Provider Profile Section -->
     <section class="wave-bg py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,7 +87,6 @@ $user_contact = $_SESSION['contact'];
             </div>
         </div>
     </section>
-
 
     <!-- Business Info Card -->
     <section class="py-8 bg-white">
@@ -121,7 +116,6 @@ $user_contact = $_SESSION['contact'];
         </div>
     </section>
 
-
     <!-- Dashboard Statistics -->
     <section class="py-8 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -143,7 +137,6 @@ $user_contact = $_SESSION['contact'];
                     </div>
                 </div>
 
-
                 <!-- Pending Orders -->
                 <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
                     <div class="flex items-center justify-center mb-4">
@@ -161,7 +154,6 @@ $user_contact = $_SESSION['contact'];
                     </div>
                 </div>
 
-
                 <!-- Completed Today -->
                 <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
                     <div class="flex items-center justify-center mb-4">
@@ -177,7 +169,6 @@ $user_contact = $_SESSION['contact'];
                         <div class="text-green-500 text-sm font-medium">+8.3%</div>
                     </div>
                 </div>
-
 
                 <!-- Total Revenue -->
                 <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
@@ -199,14 +190,12 @@ $user_contact = $_SESSION['contact'];
         </div>
     </section>
 
-
     <!-- Customer Reviews -->
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Customers' Reviews</h2>
             </div>
-
 
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Review 1 -->
@@ -221,7 +210,6 @@ $user_contact = $_SESSION['contact'];
                     </div>
                 </div>
 
-
                 <!-- Review 2 -->
                 <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
                     <div class="text-yellow-400 text-xl mb-4">⭐⭐⭐⭐⭐</div>
@@ -233,7 +221,6 @@ $user_contact = $_SESSION['contact'];
                         <span class="text-sm text-gray-500">3 days ago</span>
                     </div>
                 </div>
-
 
                 <!-- Review 3 -->
                 <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
@@ -251,7 +238,9 @@ $user_contact = $_SESSION['contact'];
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
+    <footer class="bg-gray-900 text-white
+
+ py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8">
                 <div class="col-span-1">
@@ -280,7 +269,6 @@ $user_contact = $_SESSION['contact'];
                     <ul class="space-y-2 text-gray-400">
                         <li><a href="aboutUs.html" class="hover:text-white transition-colors">About Us</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
-
                     </ul>
                 </div>
 
@@ -294,7 +282,6 @@ $user_contact = $_SESSION['contact'];
                     </ul>
                 </div>
             </div>
-
         </div>
     </footer>
 
