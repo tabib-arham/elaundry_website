@@ -1,3 +1,62 @@
+<?php
+// Database connection details
+$servername = "localhost";
+$username = "root"; // Change if needed
+$password = ""; // Change if needed
+$dbname = "bachelorpoint";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Create orders table if not exists
+$sql = "CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id VARCHAR(255) NOT NULL,
+    customer_name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    contact VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    service VARCHAR(255) NOT NULL,
+    charge DECIMAL(10,2) NOT NULL,
+    status VARCHAR(255) NOT NULL DEFAULT 'Pending'
+)";
+$conn->query($sql);
+
+// Insert sample data if table is empty
+$result = $conn->query("SELECT COUNT(*) AS count FROM orders");
+$row = $result->fetch_assoc();
+if ($row['count'] == 0) {
+    $sql = "INSERT INTO orders (order_id, customer_name, address, contact, date, service, charge, status) VALUES
+        ('BP1001', 'Rahim Uddin', 'Mirpur-1, Dhaka', '01711234567', '2025-07-21', 'Wash & Iron', 120.00, 'Confirmed'),
+        ('BP1002', 'Arham', 'Mirpur-10, Dhaka', '01716234567', '2025-07-21', 'Wash & Iron', 120.00, 'Confirmed')";
+    $conn->query($sql);
+}
+
+// Handle status update
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['status']) && isset($_POST['id'])) {
+    $id = $_POST['id'];
+    $status = $_POST['status'];
+    $sql = "UPDATE orders SET status = '$status' WHERE id = $id";
+    $conn->query($sql);
+    header("Location: orderManagement.php");
+    exit();
+}
+
+// Fetch statistics
+$totalOrders = $conn->query("SELECT COUNT(*) AS count FROM orders")->fetch_assoc()['count'];
+$pendingOrders = $conn->query("SELECT COUNT(*) AS count FROM orders WHERE status = 'Pending'")->fetch_assoc()['count'];
+$completedOrders = $conn->query("SELECT COUNT(*) AS count FROM orders WHERE status = 'Completed'")->fetch_assoc()['count'];
+$totalRevenue = $conn->query("SELECT SUM(charge) AS sum FROM orders")->fetch_assoc()['sum'] ?? 0.00;
+
+// Fetch orders
+$ordersResult = $conn->query("SELECT * FROM orders");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -240,7 +299,7 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="serviceProviderHome.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
-                    <a href="serviceManagement.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Manage
+                    <a href="serviceManagement.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Manage
                         Service</a>
 
                     <div class="relative">
@@ -273,7 +332,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-white/80 text-sm">Total Orders</p>
-                        <p class="text-2xl font-bold" id="totalOrders">145</p>
+                        <p class="text-2xl font-bold" id="totalOrders"><?php echo $totalOrders; ?></p>
                     </div>
                     <svg class="w-8 h-8 text-white/60" fill="currentColor" viewBox="0 0 20 20">
                         <path
@@ -286,7 +345,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-white/80 text-sm">Pending Orders</p>
-                        <p class="text-2xl font-bold" id="pendingOrders">23</p>
+                        <p class="text-2xl font-bold" id="pendingOrders"><?php echo $pendingOrders; ?></p>
                     </div>
                     <svg class="w-8 h-8 text-white/60" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
@@ -299,7 +358,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-white/80 text-sm">Completed</p>
-                        <p class="text-2xl font-bold" id="completedOrders">98</p>
+                        <p class="text-2xl font-bold" id="completedOrders"><?php echo $completedOrders; ?></p>
                     </div>
                     <svg class="w-8 h-8 text-white/60" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
@@ -312,7 +371,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-white/80 text-sm">Revenue</p>
-                        <p class="text-2xl font-bold" id="totalRevenue">৳89,500</p>
+                        <p class="text-2xl font-bold" id="totalRevenue">৳<?php echo number_format($totalRevenue, 2); ?></p>
                     </div>
                     <svg class="w-8 h-8 text-white/60" fill="currentColor" viewBox="0 0 20 20">
                         <path
@@ -362,50 +421,31 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-                <!-- Example row -->
-                <tr>
-                    <td class="p-2">BP1001</td>
-                    <td class="p-2">Rahim Uddin</td>
-                    <td class="p-2">Mirpur-1, Dhaka</td>
-                    <td class="p-2">01711234567</td>
-                    <td class="p-2">2025-07-21</td>
-                    <td class="p-2">Wash & Iron</td>
-                    <td class="p-2">120</td>
-                    <td class="p-2">
-                        <select class="status-select border p-1 rounded bg-white transition">
-                            <option>Confirmed</option>
-                            <option>Picked</option>
-                            <option>In Progress</option>
-                            <option>Delivering</option>
-                            <option>Completed</option>
-                            <option>Cancelled</option>
-                            <option>Pending</option>
-                        </select>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td class="p-2">BP1002</td>
-                    <td class="p-2">Arham</td>
-                    <td class="p-2">Mirpur-10, Dhaka</td>
-                    <td class="p-2">01716234567</td>
-                    <td class="p-2">2025-07-21</td>
-                    <td class="p-2">Wash & Iron</td>
-                    <td class="p-2">120</td>
-                    <td class="p-2">
-                        <select class="status-select border p-1 rounded bg-white transition">
-                            <option>Confirmed</option>
-                            <option>Picked</option>
-                            <option>In Progress</option>
-                            <option>Delivering</option>
-                            <option>Completed</option>
-                            <option>Cancelled</option>
-                            <option>Pending</option>
-                        </select>
-
-                    </td>
-                </tr>
-                <!-- Add more rows as needed -->
+                <?php while ($row = $ordersResult->fetch_assoc()) { ?>
+                    <tr>
+                        <td class="p-2"><?php echo $row['order_id']; ?></td>
+                        <td class="p-2"><?php echo $row['customer_name']; ?></td>
+                        <td class="p-2"><?php echo $row['address']; ?></td>
+                        <td class="p-2"><?php echo $row['contact']; ?></td>
+                        <td class="p-2"><?php echo $row['date']; ?></td>
+                        <td class="p-2"><?php echo $row['service']; ?></td>
+                        <td class="p-2"><?php echo $row['charge']; ?></td>
+                        <td class="p-2">
+                            <form method="post">
+                                <select class="status-select border p-1 rounded bg-white transition" name="status" onchange="this.form.submit()">
+                                    <option <?php if ($row['status'] == 'Confirmed') echo 'selected'; ?>>Confirmed</option>
+                                    <option <?php if ($row['status'] == 'Picked') echo 'selected'; ?>>Picked</option>
+                                    <option <?php if ($row['status'] == 'In Progress') echo 'selected'; ?>>In Progress</option>
+                                    <option <?php if ($row['status'] == 'Delivering') echo 'selected'; ?>>Delivering</option>
+                                    <option <?php if ($row['status'] == 'Completed') echo 'selected'; ?>>Completed</option>
+                                    <option <?php if ($row['status'] == 'Cancelled') echo 'selected'; ?>>Cancelled</option>
+                                    <option <?php if ($row['status'] == 'Pending') echo 'selected'; ?>>Pending</option>
+                                </select>
+                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                            </form>
+                        </td>
+                    </tr>
+                <?php } ?>
             </tbody>
         </table>
     </section>
@@ -507,3 +547,4 @@
 </body>
 
 </html>
+<?php $conn->close(); ?>

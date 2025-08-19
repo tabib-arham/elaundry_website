@@ -70,7 +70,7 @@ $user_contact = $_SESSION['contact'];
                     <div class="relative">
                         <button href="#" class="text-blue-600 px-3 py-2 text-sm font-medium">Home</button>
                         <a href="serviceManagement.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Manage Service</a>
-                        <a href="orderManagement.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Orders</a>
+                        <a href="orderManagement.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Orders</a>
                     </div>
                     <a href="logout.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Log Out</a>
                 </div>

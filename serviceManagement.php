@@ -156,12 +156,12 @@ if (isset($_GET['delete_location'])) {
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="serviceProviderHome.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
+                    <a href="serviceProviderHome.php" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
                     <a href="#" class="text-blue-600 hover:text-blue-600 px-3 py-2 text-sm font-medium">Manage
                         Service</a>
                     <div class="relative">
                         <button class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
-                           <a href="orderManagement.html"> Orders </a>
+                           <a href="orderManagement.php"> Orders </a>
                         </button>
                         
                     </div>
